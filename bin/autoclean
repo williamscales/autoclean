@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
+usage = <<USAGE
+Autoclean is a rules-based file cleaner.
+
+Usage:
+======
+
+    autoclean [rules file]
+    If no rules file is specified, ~/.autocleanrc is read by default.
+    The rules file is written in YAML, for details see autocleanrc.example.
+
+USAGE
+
+require 'autoclean'
+require 'optparse'
+
+options = {}
+opts = OptionParser.new do |opts|
+  opts.banner = usage
+  
+  opts.on("-v", "--version", "Display current version") do
+    puts "Autoclean #{Autoclean::VERSION}"
+    exit 0
+  end
+end
+
+# Read command line options into 'options' hash
+opts.parse!
+
+# Get rules file from command line
+case ARGV.size
+when 0
+  options[:rules_file] = '~/.autocleanrc'
+when 1
+  options[:rules_file] = ARGV[0]
+end
+
+# Parse rules file
+
+rules = Autoclean::parse_rules_file(options[:rules_file])
+
+# Clean!
+
+Autoclean::clean(rules)

@@ -1,0 +1,13 @@
+- :glob: /home/example/downloads/*
+  :condition:
+    - age
+    - '> 4 weeks ago'
+  :action: delete
+  :unless:
+    - like
+    - /home/example/.config/transmission/torrents/*.torrent
+
+- :glob: /home/example/*_scrot.png
+  :action: 
+    - move
+    - /home/example/screenshots

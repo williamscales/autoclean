@@ -1,0 +1,36 @@
+Autoclean is a rules-based file cleaner.
+
+Usage:
+======
+
+    autoclean [rules file]
+    If no rules file is specified, ~/.autocleanrc is read by default.
+
+    -v, --version                    Display current version
+
+The rules file
+==============
+
+The rules file is written in YAML <http://www.yaml.org/> and is a list
+of hashes.  Each hash is keyed by symbols.
+
+Elements and what they do
+-------------------------
+
+:glob:		A shell glob from which the files to be cleaned are pulled.
+:condition:	A list with two elements.  The first should specifiy a
+		condition (for now only 'age' is supported) and the
+		second element should give the expression.  The first
+		character of this expression should be eithe '>' or
+		'<' and the rest a specification parseable by Chronic
+		<http://chronic.rubyforge.org/>.
+:action:	The action to be taken on the files, can be either
+		'delete' or 'move'.  In the case of 'move' it should
+		be an array with the second element containing the
+		destination directory.
+:unless:	A way to remove files from the list.  Right now the
+		only supported operator is 'like' which compares the
+		basename of files from :glob to the basename of files
+		from a glob specified in the second element.  Designed
+		for use with a torrent program, one might pass the
+		torrent directory to this operator.
